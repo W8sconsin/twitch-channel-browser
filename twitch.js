@@ -14,12 +14,13 @@ function checkChannels() {
 }
 
 function checkChannel(channel) {
-  var url_user = "https://wind-bow.glitch.me/twitch-api/users/" + channel;
+  var url_user = "https://api.twitch.tv/kraken/users/" + channel + "?client_id=z54qmsb43vtv9h2i1amfefgpp85rpp";
+  // var url_user = "https://wind-bow.glitch.me/twitch-api/users/" + channel;
   var result = new Object();
   result.logo = "https://upload.wikimedia.org/wikipedia/commons/1/19/Blank_icon.png";
   result.channel = channel;
   result.program = "";
- 
+
   $.getJSON(url_user, function(data_user) {
     if (data_user["error"] != null) {
       result.status = "Closed";
@@ -31,7 +32,8 @@ function checkChannel(channel) {
         result.logo = data_user.logo;
       }
 
-      var url_stream = "https://wind-bow.glitch.me/twitch-api/streams/" + channel;
+      var url_stream = "https://api.twitch.tv/kraken/streams/" + channel + "?client_id=z54qmsb43vtv9h2i1amfefgpp85rpp";
+      // var url_stream = "https://wind-bow.glitch.me/twitch-api/streams/" + channel;
 
       $.getJSON(url_stream, function(data_stream) {
         if (data_stream.stream === null) {
@@ -39,8 +41,10 @@ function checkChannel(channel) {
         } else {
           result.status = "Online";
           result.program = data_stream.stream.channel.game + "<br><i>" + data_stream.stream.channel.status + "</i>";
+          // if (data_stream.stream.channel.video_banner != null) {
+          //   result.logo = data_stream.stream.channel.video_banner;
+          // }
         }
-
         displayInfo(result);
       });
     }
@@ -65,7 +69,7 @@ function checkChannel(channel) {
     row = "<tr class=\"" + row_class + "\"><td ><img class=\"channel_icon\"   src=\"" + info.logo + "\" /></td><td>" + info.channel + "</td></td><td>" + info.status + "</td><td>" + info.program + "</td></tr>";
     $("#table_result").append(row);
 
-    $(".se-pre-con").fadeOut(1000);;
+    $(".se-pre-con").fadeOut(1000);
   }
 
 }
@@ -90,7 +94,6 @@ $(document).on("change","select",function(){
       $("tr.table-danger").each(function() {
         $(this).show();
       });
-      // $("th.program-label").css("width", "200px");
       break;
     case "Online":
       $("tr.table-success").each(function() {
